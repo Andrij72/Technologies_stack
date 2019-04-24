@@ -1,0 +1,13 @@
+
+.btn
+{
+    margin: 20px;
+}
+
+.border
+{
+    margin:20px;
+    border-size:2px;
+    border-style:solid;
+    border-color:lightgray;
+}
