@@ -12,9 +12,11 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
+import java.util.logging.Logger;
 
-@Log4j
+
 public class MySqlClass {
+    private static final Logger LOGGER = Logger.getLogger(MySqlClass.class.getName());
     private final static String INSERT_NAME = "INSERT INTO names (name) VALUES (?)";
     private final static String SELECT_NAME = "SELECT name FROM names";
     public static Connection connect = null;
@@ -36,7 +38,7 @@ public class MySqlClass {
             statement.execute();
             statement.close();
         } catch  (Exception e) {
-            log.error("ADD operation error: " + e.getMessage());
+            LOGGER.warning ("ADD operation error: " + e.getMessage());
         } finally {
                if (rs != null) {
                    rs.close();
