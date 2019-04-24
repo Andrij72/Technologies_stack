@@ -1,7 +1,8 @@
-import Databases.MySqlClass;
+import databases.MySqlClass;
 import org.json.JSONObject;
 
-import javax.servlet.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import javax.servlet.http.HttpServlet;
 import java.io.BufferedReader;

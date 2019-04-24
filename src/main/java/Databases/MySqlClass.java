@@ -1,56 +1,73 @@
-package Databases;
+package databases;
+
+
+
+import lombok.extern.log4j.Log4j;
 
 import javax.naming.NamingException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.sql.PreparedStatement;
 
+@Log4j
 public class MySqlClass {
-    public static Connection conn;
-    public static Statement stat;
-    public static ResultSet rs;
+    private final static String INSERT_NAME = "INSERT INTO names (name) VALUES (?)";
+    private final static String SELECT_NAME = "SELECT name FROM names";
+    public static Connection connect = null;
+    public static Statement stat = null;
+    public static ResultSet rs = null;
+    public static PreparedStatement statement = null;
 
-    public static void Conn() throws ClassNotFoundException, SQLException, NamingException {
+    public static void conn() throws ClassNotFoundException, SQLException, NamingException {
         Class.forName("org.mysql.JDBC");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbmateakademy");
+        connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbmateakademy");
     }
 
     public static void addName(String name) throws ClassNotFoundException, SQLException {
         try {
-            Conn();
-            stat = conn.createStatement();
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO names (name) VALUES (?)");
+            conn();
+            stat = connect.createStatement();
+            statement = connect.prepareStatement(INSERT_NAME);
             statement.setString(1, name);
             statement.execute();
             statement.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        finally {
-            stat.close();
-            CloseDB();
-        }
+        } catch  (Exception e) {
+            log.error("ADD operation error: " + e.getMessage());
+        } finally {
+               if (rs != null) {
+                   rs.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connect != null) {
+                    connect.close();
+                }
+            }
     }
 
-    public static ArrayList<String> getAllNames() throws ClassNotFoundException, SQLException, NamingException
-    {
+    public static ArrayList<String> getAllNames() throws ClassNotFoundException, SQLException, NamingException {
         ArrayList<String> names = new ArrayList<String>();
+        conn();
+        stat = connect.createStatement();
+        rs = stat.executeQuery(SELECT_NAME);
 
-        Conn();
-        stat = conn.createStatement();
-        ResultSet rs = stat.executeQuery("select name from names");
-        
         while (rs.next()) {
             names.add(rs.getString("name"));
         }
 
         rs.close();
         stat.close();
-        CloseDB();
+        closeDB();
 
         return names;
     }
 
-    public static void CloseDB() throws ClassNotFoundException, SQLException {
-        conn.close();
+    public static void closeDB() throws ClassNotFoundException, SQLException {
+        connect.close();
     }
 }
