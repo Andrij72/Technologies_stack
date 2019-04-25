@@ -1,7 +1,5 @@
 package databases;
 
-
-
 import javax.naming.NamingException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.util.logging.Logger;
-
 
 public class MySqlClass {
     private static final Logger LOGGER = Logger.getLogger(MySqlClass.class.getName());
@@ -51,7 +48,7 @@ public class MySqlClass {
     }
 
     public static ArrayList<String> getAllNames() throws ClassNotFoundException, SQLException, NamingException {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         connectDb();
         stat = connect.createStatement();
         rs = stat.executeQuery(SELECT_NAME);
