@@ -2,8 +2,6 @@ package databases;
 
 
 
-import lombok.extern.log4j.Log4j;
-
 import javax.naming.NamingException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,14 +22,14 @@ public class MySqlClass {
     public static ResultSet rs = null;
     public static PreparedStatement statement = null;
 
-    public static void conn() throws ClassNotFoundException, SQLException, NamingException {
+    public static void connectDb() throws ClassNotFoundException, SQLException, NamingException {
         Class.forName("org.mysql.JDBC");
         connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbmateakademy");
     }
 
     public static void addName(String name) throws ClassNotFoundException, SQLException {
         try {
-            conn();
+            connectDb();
             stat = connect.createStatement();
             statement = connect.prepareStatement(INSERT_NAME);
             statement.setString(1, name);
@@ -54,7 +52,7 @@ public class MySqlClass {
 
     public static ArrayList<String> getAllNames() throws ClassNotFoundException, SQLException, NamingException {
         ArrayList<String> names = new ArrayList<String>();
-        conn();
+        connectDb();
         stat = connect.createStatement();
         rs = stat.executeQuery(SELECT_NAME);
 
